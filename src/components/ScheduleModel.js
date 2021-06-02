@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux'
+import moment from 'moment'
 
 import styled from 'styled-components'
 
@@ -36,50 +37,63 @@ const exampleCluster = {
 }
 
 const ScheduleModel = () => {
-    const { data: schedules } = useSelector(state => state.schedule)
-    const [dateNow, setDateNow] = useState(Date())
+    // const { data: schedules } = useSelector(state => state.schedule)
+    const [dayNow, setpresentDate] = useState(Date())
     const presentWeek = []
     const presentSchedule = []
+    const presentDate = moment(dayNow)
 
-    useEffect(() => {
-        for (let i = 0; i < 7; i++) {
-            presentWeek.push(new Date(dateNow.setDate(dateNow.getDay() - dateNow.getDay() + 1)))
-        }
-    }, [dateNow])
+    console.log(presentDate)
+    // useEffect(() => {
+    //     for (let i = 0; i < 7; i++) {
+    //         presentWeek.push(new Date(new Date(presentDate).setDate(presentDate.getDay() - presentDate.getDay() + 1)))
+    //     }
+    // }, [])
+
+    for (let i = 0; i < 7; i++) {
+        presentWeek.push(presentDate.subtract(presentDate.days(), 'days').add(i*5, 'd').format('d/MM/YYYY'))
+    }
+
+    console.log(presentDate)
+    console.log(presentWeek)
 
 
-    schedules?.roomList.forEach(room => {
-        room.classList.forEach(classroom => {
-            let dayType = null
-            for (let i = 0; i < 7; i++) {
-                let isPush = false
+    // schedules?.roomList.forEach(room => {
+    //     room.classList.forEach(classroom => {
+    //         let dayType = null
+    //         for (let i = 0; i < 7; i++) {
+    //             let isPush = false
 
-                if (i !== 6) {
-                    dayType = i % 2 === 0 ? 'even' : 'odd'
-                }
-                if (classroom.dayType === dayType || classroom.dayType === 'full')
-                    if (classroom.beginDay <= presentWeek[i] && classroom.finishDay > presentWeek[i]) {
-                        presentSchedule.push(<ScheduleBox>heloo</ScheduleBox>)
-                        isPush = true
-                    }
+    //             if (i !== 6) {
+    //                 dayType = i % 2 === 0 ? 'even' : 'odd'
+    //             }
+    //             if (classroom.dayType === dayType || classroom.dayType === 'full')
+    //                 if (classroom.beginDay <= presentWeek[i] && classroom.finishDay > presentWeek[i]) {
+    //                     presentSchedule.push(<ScheduleBox>heloo</ScheduleBox>)
+    //                     isPush = true
+    //                 }
 
-                if (!isPush)
-                    presentSchedule.push(<ScheduleBox>nothing</ScheduleBox>)
+    //             if (!isPush)
+    //                 presentSchedule.push(<ScheduleBox>nothing</ScheduleBox>)
 
-            }
-        })
-    })
-
+    //         }
+    //     })
+    // })
     return (
         <ScheduleWrap>
             <h2>Lịch học theo tuần</h2>
-            <h3>{schedules.name}</h3>
-            <span onClick={() => setDateNow(new Date(dateNow.getDay - 7))}>{'<'}</span>
-            <span>{dateNow}</span>
-            <span onClick={() => setDateNow(new Date(dateNow.getDay + 7))}>{'>'}</span>
+            {/* <h3>{schedules.name}</h3> */}
+            {/* <span onClick={() => setpresentDate(new Date(presentDate.getDay - 7))}>{'<'}</span> */}
+            {/* <span>{presentDate}</span> */}
+            {/* <span onClick={() => setpresentDate(new Date(presentDate.getDay + 7))}>{'>'}</span> */}
 
             <div id='schedule'>
-                {presentSchedule}
+                {/* {presentWeek?.map(day => {
+                    return <div><span>{moment(day).format('d/MM/YYY')}</span></div>
+                })} */}
+                {
+                    // presentSchedule
+                }
             </div>
 
         </ScheduleWrap>

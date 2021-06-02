@@ -6,31 +6,33 @@ const setSchedule = ({ cluster, classroomList = [], roomList = [] }) => {
     crList.map(cr => {
         cr.priority = (cr.numberOfPupils * (cr.dayType === 'full' ? 6 : 3) / cr.learnDay)
         return cr
-    })
+    }).sort((a, b) => a.priority - b.priority)
+
 
     // set status day
     rList.map(r => {
-        r.status.odd = r.status.even = r.status.full = cluster.beginDay
+        r.odd = r.even = r.full = cluster.beginDay
         return r
     })
 
-    // filter big classroom
-    let bigCr = crList.filter(cr => cr.numberOfPupils > 30).sort((a, b) => b.priority - a.priority)
+    // // filter big classroom
+    // let bigCr = crList.filter(cr => cr.numberOfPupils > 30).sort((a, b) => b.priority - a.priority)
 
-    // filter small classroom
-    let smallCr = crList.filter(cr => cr.numberOfPupils <= 30).sort((a, b) => b.priority - a.priority)
+    // // filter small classroom
+    // let smallCr = crList.filter(cr => cr.numberOfPupils <= 30).sort((a, b) => b.priority - a.priority)
 
-    // filter big room
-    let bigR = rList.filter(r => r.maxPupils > 30)
+    // // filter big room
+    // let bigR = rList.filter(r => r.maxPupils > 30)
 
-    // handle big classroom with big room
-    handler(bigCr, bigR)
+    // // handle big classroom with big room
+    // handler(bigCr, bigR)
 
-    // priority for small room
-    let smallPriorityRoom = rList.sort((a, b) => a.maxPupils === 30 ? -1 : 1)
+    // // priority for small room
+    // let smallPriorityRoom = rList.sort((a, b) => a.maxPupils === 30 ? -1 : 1)
 
-    // handle small room with priority small room
-    handler(smallCr, smallPriorityRoom)
+    // // handle small room with priority small room
+    // handler(smallCr, smallPriorityRoom)
+    handler(crList, rList)
     return { cluster, crList, rList }
 }
 const handler = (classroomList = [], roomList = []) => {
@@ -69,24 +71,25 @@ const handler = (classroomList = [], roomList = []) => {
     classroomList.forEach(cr => {
         let choosen = {}
         roomList.forEach(r => {
-            if (r.roomType === cr.roomType) {
+
+            if (r.roomType === cr.roomType && r.maxPupils >= cr.numberOfPupils) {
                 if (!choosen.length) {
                     choosen = r
                 }
-                if (r.status[cr.dayType] > choosen.status[cr.dayType])
+                if (r[cr.dayType] > choosen[cr.dayType])
                     choosen = r
             }
         })
-        cr.beginDay = choosen.status[cr.dayType]
-        cr.finishDay = addDate(cr.beginDay, totalDay(cr.beginDay,cr.dayType, cr.learnDay)).toLocaleDateString()
+        cr.beginDay = choosen[cr.dayType]
+        cr.finishDay = addDate(cr.beginDay, totalDay(cr.beginDay, cr.dayType, cr.learnDay)).toLocaleDateString()
 
         cr.roomName = choosen.name
 
         if (cr.roomType === 'full') {
-            choosen.status.full = cr.finishDay
+            choosen.full = cr.finishDay
         } else {
-            choosen.status[cr.dayType] = cr.finishDay
-            choosen.status['full'] = cr.finishDay
+            choosen[cr.dayType] = cr.finishDay
+            choosen['full'] = cr.finishDay
         }
     })
 }

@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom'
 
 import NavBar from '../components/NavBar'
+import ScheduleModel from '../components/ScheduleModel'
 import SideBar from '../components/SideBar'
 import CreateClass from '../pages/CreateClass'
 import CreateCluster from '../pages/CreateCluster'
@@ -20,6 +21,9 @@ const index = () => {
                     </Route>
                     <Route path='/themphong'>
                         <CreateCluster />
+                    </Route>
+                    <Route path='/test'>
+                        <ScheduleModel />
                     </Route>
                     <Route path='/'>
                         <Home />

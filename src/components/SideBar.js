@@ -63,6 +63,15 @@ const SideBar = () => {
                     <span>Thêm lớp</span>
                 </div>
             </NavLink>
+            <NavLink
+                to='/test'
+                activeClassName='active'
+                exact
+            >
+                <div className='item'>
+                    <span>Test</span>
+                </div>
+            </NavLink>
             <div className='ruler'></div>
         </Wrap>
     );

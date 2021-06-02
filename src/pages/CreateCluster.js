@@ -3,6 +3,8 @@ import styled from 'styled-components'
 
 import { AddIcon } from '../components/Icon'
 import setSchedule from '../utils/setSchedule'
+import moment from 'moment'
+
 
 const ClusterWrap = styled.div`
     width: 90%;
@@ -73,13 +75,8 @@ const CreateCluster = () => {
     classroomList.current = []
 
     for (let i = 0; i < roomLine; i++) {
-        roomList.current.push(<input key={i * 3} type='text'  placeholder='Tên phòng' name='name' />)
-        roomList.current.push(
-            <select key={i * 3 + 1} id='maxPupils' defaultValue='Số lượng tối đa'>
-                {/* <option disabled  hidden selected>Số lượng tối đa</option> */}
-                <option value={30}>30 người</option>
-                <option value={50}>50 người</option>
-            </select>)
+        roomList.current.push(<input key={i * 3} type='text' placeholder='Tên phòng' name='name' />)
+        roomList.current.push(<input key={i * 3 + 1} type='text' placeholder='Sức chứa' name='maxPupils'  required/>)
         roomList.current.push(
             <select key={i * 3 + 2} id='roomType' >
                 {/* <option disabled selected hidden>Loại phòng</option> */}
@@ -90,18 +87,18 @@ const CreateCluster = () => {
     }
 
     for (let i = 0; i < classLine; i++) {
-        classroomList.current.push(<input key={i * 500} type='text' placeholder='Tên lớp' name='name' />)
-        classroomList.current.push(<input key={i * 500 + 1} type='number' placeholder='sĩ số' name='numberOfPupils' />)
-        classroomList.current.push(<input key={i * 500 + 2} type='number' placeholder='Số ngày học' name='learnDay' min={1} />)
+        classroomList.current.push(<input key={i * 500} type='text' placeholder='Tên lớp' name='name' required />)
+        classroomList.current.push(<input key={i * 500 + 1} type='number' placeholder='sĩ số' name='numberOfPupils' required />)
+        classroomList.current.push(<input key={i * 500 + 2} type='number' placeholder='Số ngày học' name='learnDay' min={1} required />)
         classroomList.current.push(
-            <select key={i * 500 + 3} id='dayType'>
+            <select key={i * 500 + 3} id='dayType' required>
                 {/* <option disabled selected hidden>Kiểu ngày học</option> */}
                 <option value='even'>ngày chẵn</option>
                 <option value='odd'>ngày lẻ</option>
                 <option value='full'>Cả tuần</option>
             </select>)
         classroomList.current.push(
-            <select key={i * 500 + 4} id='roomType' >
+            <select key={i * 500 + 4} id='roomType' required>
                 {/* <option disabled selected hidden>Loại phòng</option> */}
                 <option value='PT'>Phòng bình thường</option>
                 <option value='PM'>Phòng máy tính </option>
@@ -129,7 +126,6 @@ const CreateCluster = () => {
         for (let i = 2; i < 2 + roomLine * 3; i++) {
             obj[formRef.current[i].name || formRef.current[i].id] = formRef.current[i].value
             if ((i - 1) % 3 === 0) {
-                obj.status = {}
                 clusterData.roomList.push(obj)
                 obj = {}
             }
@@ -147,6 +143,8 @@ const CreateCluster = () => {
 
     }
 
+    console.log(moment('1/1/2021').format('d/MM/YYYY'))
+
     return (
         <ClusterWrap>
             <RoomWrap>
@@ -160,10 +158,10 @@ const CreateCluster = () => {
                             <h2>Tên cụm</h2>
                             <div className='ruler'></div>
                         </div>
-                        <input type='text' placeholder='Tên cụm' name='name' />
+                        <input type='text' placeholder='Tên cụm' name='name' required />
 
                         {/* <input type={type} placeholder='Ngày bắt đầu học' onFocus={handleType} /> */}
-                        <input type='date' name='beginDay' />
+                        <input type='date' name='beginDay' required />
 
 
                     </div>
