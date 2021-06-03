@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components'
 import { NavLink } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux';
+import { getMe } from '../reducers/user';
 
 const Wrap = styled.div`
     height: 100vh;
@@ -34,6 +36,15 @@ const Wrap = styled.div`
 `
 
 const SideBar = () => {
+    const { isFetching, data: user } = useSelector(state => state.user)
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        dispatch(getMe({ token: user.token }))
+    }, [dispatch, user.token])
+
+    // if (isFetching)
+    //     return null
     return (
         <Wrap>
             <NavLink
@@ -73,6 +84,13 @@ const SideBar = () => {
                 </div>
             </NavLink>
             <div className='ruler'></div>
+            {user.clusterList?.map(cluster => {
+                return <NavLink to={`${cluster.id}`} >
+                    <div className='item'>
+                        <span>{cluster.name}</span>
+                    </div>
+                </NavLink>
+            })}
         </Wrap>
     );
 };

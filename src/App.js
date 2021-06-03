@@ -15,13 +15,8 @@ import { getMe } from './reducers/user';
 dotenv.config()
 
 const App = () => {
-    const dispatch = useDispatch()
+
     const { data: user } = useSelector(state => state.user)
-    console.log(1)
-    useEffect(() => {
-        if (!user.email)
-            dispatch(getMe())
-    }, [dispatch, user.email])
 
     return (
         <ThemeProvider theme={darkTheme}>

@@ -21,4 +21,4 @@ const clusterSlice = createSlice({
     }
 })
 
-export default clusterSlice.actions
+export default clusterSlice.reducer

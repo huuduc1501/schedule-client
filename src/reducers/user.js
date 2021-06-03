@@ -21,7 +21,7 @@ export const getMe = createAsyncThunk('user/getme', async () => {
 
 const userSlice = createSlice({
     name: 'user',
-    initialState: { data: { token: localStorage.getItem('token') } },
+    initialState: { isFetching: true, data: { token: localStorage.getItem('token') } },
     reducers: {
         logout(state, action) {
             state = {}
@@ -31,12 +31,17 @@ const userSlice = createSlice({
     extraReducers: {
         [login.fulfilled]: (state, action) => {
             state.data = action.payload || {}
+            state.isFetching = false
         },
         [signup.fulfilled]: (state, action) => {
             state.data = action.payload || {}
+            state.isFetching = false
+
         },
         [getMe.fulfilled]: (state, action) => {
             state.data = action.payload
+            state.isFetching = false
+
         }
     }
 })

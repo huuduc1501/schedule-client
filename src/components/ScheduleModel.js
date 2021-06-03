@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import moment from 'moment'
 
 import styled from 'styled-components'
+import { useParams } from 'react-router';
+import { getCluster } from '../reducers/specifyCluster'
 
 const ScheduleWrap = styled.div`
     width: 90%;
@@ -26,73 +28,80 @@ const ScheduleBox = styled.div`
     flex-wrap: wrap;
 `
 
-const exampleCluster = {
-    name: 'cumj 1', roomList: [
-        {
-            name: 'room1', classList: [
-                { name: 'class1', beginDay: '', roomType: '' }
-            ]
-        }
-    ]
-}
-
 const ScheduleModel = () => {
-    // const { data: schedules } = useSelector(state => state.schedule)
+    const { isFetching, data: cluster } = useSelector(state => state.cluster)
+    const { clusterId } = useParams()
+    const dispatch = useDispatch()
     const [dayNow, setpresentDate] = useState(Date())
     const presentWeek = []
     const presentSchedule = []
     const presentDate = moment(dayNow)
 
-    console.log(presentDate)
-    // useEffect(() => {
-    //     for (let i = 0; i < 7; i++) {
-    //         presentWeek.push(new Date(new Date(presentDate).setDate(presentDate.getDay() - presentDate.getDay() + 1)))
-    //     }
-    // }, [])
+    useEffect(() => {
+        dispatch(getCluster(clusterId))
+    }, [clusterId, dispatch])
+
 
     for (let i = 0; i < 7; i++) {
-        presentWeek.push(presentDate.subtract(presentDate.days(), 'days').add(i*5, 'd').format('d/MM/YYYY'))
+        presentWeek.push(presentDate.day(i + 1).format('D/MM/YYYY'))
     }
-
-    console.log(presentDate)
     console.log(presentWeek)
 
 
-    // schedules?.roomList.forEach(room => {
-    //     room.classList.forEach(classroom => {
-    //         let dayType = null
-    //         for (let i = 0; i < 7; i++) {
-    //             let isPush = false
+    cluster.roomList?.forEach(room => {
+        presentSchedule.push(<ScheduleBox>{room.name}</ScheduleBox>)
 
-    //             if (i !== 6) {
-    //                 dayType = i % 2 === 0 ? 'even' : 'odd'
-    //             }
-    //             if (classroom.dayType === dayType || classroom.dayType === 'full')
-    //                 if (classroom.beginDay <= presentWeek[i] && classroom.finishDay > presentWeek[i]) {
-    //                     presentSchedule.push(<ScheduleBox>heloo</ScheduleBox>)
-    //                     isPush = true
-    //                 }
 
-    //             if (!isPush)
-    //                 presentSchedule.push(<ScheduleBox>nothing</ScheduleBox>)
+        for (let i = 0; i < 7; i++) {
+            let dayType = null
 
-    //         }
-    //     })
-    // })
+            let isPush = false
+
+            if (i !== 6) {
+                dayType = i % 2 === 0 ? 'even' : 'odd'
+
+
+                room.classList?.forEach(classroom => {
+
+                    if (classroom.dayType === dayType || classroom.dayType === 'full') {
+                        if (moment(presentWeek[i], 'D/MM/YYYY').diff(classroom.beginDay, 'day') >= 0 && moment(presentWeek[i], 'D/MM/YYYY').diff(classroom.finishDay, 'day') < 0) {
+
+                            presentSchedule.push(<ScheduleBox>heloo</ScheduleBox>)
+                            isPush = true
+                        }
+                    }
+
+                })
+            }
+
+            if (!isPush)
+                presentSchedule.push(<ScheduleBox>nothing</ScheduleBox>)
+        }
+
+    })
+
+    if (isFetching)
+        return null
+
+    const handleIncrease = (e) => {
+        console.log('clik')
+        setpresentDate((d) => moment(d).add(7, 'days'))
+    }
     return (
         <ScheduleWrap>
             <h2>Lịch học theo tuần</h2>
-            {/* <h3>{schedules.name}</h3> */}
-            {/* <span onClick={() => setpresentDate(new Date(presentDate.getDay - 7))}>{'<'}</span> */}
-            {/* <span>{presentDate}</span> */}
-            {/* <span onClick={() => setpresentDate(new Date(presentDate.getDay + 7))}>{'>'}</span> */}
+            <h3>{cluster.name}</h3>
+            {/* <span onClick={() => setpresentDate((d) => moment(d).add(-7, 'days'))}>{'<'}</span> */}
+            <span>{presentDate.format('D/MM/YYYY')}</span>
+            <span onClick={handleIncrease}>{'>'}</span>
 
             <div id='schedule'>
-                {/* {presentWeek?.map(day => {
-                    return <div><span>{moment(day).format('d/MM/YYY')}</span></div>
-                })} */}
+                <ScheduleBox ></ScheduleBox>
+                {presentWeek?.map(day => {
+                    return <ScheduleBox><span>{day}</span></ScheduleBox>
+                })}
                 {
-                    // presentSchedule
+                    presentSchedule
                 }
             </div>
 

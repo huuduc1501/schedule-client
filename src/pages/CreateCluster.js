@@ -2,9 +2,9 @@ import React, { useRef, useState } from 'react';
 import styled from 'styled-components'
 
 import { AddIcon } from '../components/Icon'
-import setSchedule from '../utils/setSchedule'
-import moment from 'moment'
+import { client } from '../utils';
 
+import setSchedule from '../utils/setSchedule'
 
 const ClusterWrap = styled.div`
     width: 90%;
@@ -76,7 +76,7 @@ const CreateCluster = () => {
 
     for (let i = 0; i < roomLine; i++) {
         roomList.current.push(<input key={i * 3} type='text' placeholder='Tên phòng' name='name' />)
-        roomList.current.push(<input key={i * 3 + 1} type='text' placeholder='Sức chứa' name='maxPupils'  required/>)
+        roomList.current.push(<input key={i * 3 + 1} type='text' placeholder='Sức chứa' name='maxPupils' required />)
         roomList.current.push(
             <select key={i * 3 + 2} id='roomType' >
                 {/* <option disabled selected hidden>Loại phòng</option> */}
@@ -138,12 +138,15 @@ const CreateCluster = () => {
                 obj = {}
             }
         }
-        // console.log(clusterData)
+        console.log(JSON.stringify(clusterData))
         console.log(setSchedule(clusterData))
+
+        // const { data } = client('/schedule/cluster', { body: clusterData })
+        // console.log(data)
 
     }
 
-    console.log(moment('1/1/2021').format('d/MM/YYYY'))
+
 
     return (
         <ClusterWrap>
