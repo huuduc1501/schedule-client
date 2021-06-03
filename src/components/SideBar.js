@@ -14,6 +14,10 @@ const Wrap = styled.div`
     overflow: auto;
     padding-top: 1.5rem;
 
+    h3 {
+        padding: .4rem 0 .4rem 1.5rem;
+    }
+
     .item {
         display: flex;
         align-items: center;
@@ -53,19 +57,19 @@ const SideBar = () => {
                 exact
             >
                 <div className='item'>
-                    <span>Lịch của tôi</span>
+                    <span>Trang chủ</span>
                 </div>
             </NavLink>
             <NavLink
-                to='/themphong'
+                to='/themcum'
                 activeClassName='active'
                 exact
             >
                 <div className='item'>
-                    <span>Thêm phòng</span>
+                    <span>Tạo cụm mới</span>
                 </div>
             </NavLink>
-            <NavLink
+            {/* <NavLink
                 to='/themlop'
                 activeClassName='active'
                 exact
@@ -73,8 +77,8 @@ const SideBar = () => {
                 <div className='item'>
                     <span>Thêm lớp</span>
                 </div>
-            </NavLink>
-            <NavLink
+            </NavLink> */}
+            {/* <NavLink
                 to='/test'
                 activeClassName='active'
                 exact
@@ -82,8 +86,9 @@ const SideBar = () => {
                 <div className='item'>
                     <span>Test</span>
                 </div>
-            </NavLink>
+            </NavLink> */}
             <div className='ruler'></div>
+            <h3>Các cụm của tôi</h3>
             {user.clusterList?.map(cluster => {
                 return <NavLink to={`${cluster.id}`} >
                     <div className='item'>

@@ -74,7 +74,7 @@ const Signup = ({ setAuth }) => {
             username: username.value,
             password: password.value,
             email: email.value,
-            role: 'GV',
+
         }
 
         dispatch(signup({ payload }))

@@ -17,15 +17,11 @@ const index = () => {
             <SideBar />
             <Container>
                 <Switch>
-                    <Route path='/themlop'>
-                        <CreateClass />
-                    </Route>
-                    <Route path='/themphong'>
+        
+                    <Route path='/themcum'>
                         <CreateCluster />
                     </Route>
-                    <Route path='/test'>
-                        <ScheduleModel />
-                    </Route>
+        
                     <Route path='/:clusterId'>
                         <Cluster />
                     </Route>

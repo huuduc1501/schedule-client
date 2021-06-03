@@ -16,6 +16,9 @@ export const client = async (endPoint, { body, ...customConfig } = {}) => {
             Accept: "application/json",
             authorization: `Bearer${customConfig.token ? customConfig.token : token}`
         },
+        validateStatus: function (status) {
+            return status >= 100 && status < 599
+        }
     })
     const { data } = await clientInstance.request(endPoint, { data: body })
     return data

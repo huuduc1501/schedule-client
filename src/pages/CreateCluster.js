@@ -1,10 +1,13 @@
 import React, { useRef, useState } from 'react';
 import styled from 'styled-components'
+import { useDispatch } from 'react-redux'
+import {useHistory} from 'react-router-dom'
 
 import { AddIcon } from '../components/Icon'
 import { client } from '../utils';
 
 import setSchedule from '../utils/setSchedule'
+import { addCluster } from '../reducers/user';
 
 const ClusterWrap = styled.div`
     width: 90%;
@@ -65,6 +68,8 @@ const RoomWrap = styled.div`
 `
 
 const CreateCluster = () => {
+    const dispatch = useDispatch()
+    const history = useHistory()
     const [roomLine, setRoomLine] = useState(1)
     const [classLine, setClassLine] = useState(1)
     // const [type, setType] = useState('text')
@@ -116,7 +121,7 @@ const CreateCluster = () => {
     //     e.preventDefault()
     //     setType('date')
     // }
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
         let clusterData = { cluster: {}, classroomList: [], roomList: [], }
         let obj = {}
@@ -138,11 +143,10 @@ const CreateCluster = () => {
                 obj = {}
             }
         }
-        console.log(JSON.stringify(clusterData))
-        console.log(setSchedule(clusterData))
 
-        // const { data } = client('/schedule/cluster', { body: clusterData })
-        // console.log(data)
+        const { data } = await client('/schedule/cluster', { body: clusterData })
+        dispatch(addCluster(data))
+        history.push('/')
 
     }
 

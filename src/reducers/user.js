@@ -26,6 +26,9 @@ const userSlice = createSlice({
         logout(state, action) {
             state = {}
             localStorage.removeItem('token')
+        },
+        addCluster(state, action) {
+            state.data.clusterList.push(action.payload) 
         }
     },
     extraReducers: {
@@ -46,5 +49,5 @@ const userSlice = createSlice({
     }
 })
 
-export const { logout } = userSlice.actions
+export const { logout , addCluster} = userSlice.actions
 export default userSlice.reducer

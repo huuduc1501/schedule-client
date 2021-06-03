@@ -20,7 +20,7 @@ const ScheduleWrap = styled.div`
 `
 const ScheduleBox = styled.div`
     background: ${props => props.theme.grey};
-    border: 2px solid #ffac41;
+    border: 1px solid #ffac41;
     padding: .2rem .4rem;
     /* height: ${props => props.height || '120px'}; */
     display: flex;
@@ -66,7 +66,11 @@ const ScheduleModel = () => {
                     if (classroom.dayType === dayType || classroom.dayType === 'full') {
                         if (moment(presentWeek[i], 'D/MM/YYYY').diff(classroom.beginDay, 'day') >= 0 && moment(presentWeek[i], 'D/MM/YYYY').diff(classroom.finishDay, 'day') < 0) {
 
-                            presentSchedule.push(<ScheduleBox>heloo</ScheduleBox>)
+                            presentSchedule.push(<ScheduleBox>
+                                <span>{`Lớp: ${classroom.name}`}</span>
+                                <span>
+                                    {`Sĩ số: ${classroom.numberOfPupils}`}
+                                </span></ScheduleBox>)
                             isPush = true
                         }
                     }
@@ -75,7 +79,7 @@ const ScheduleModel = () => {
             }
 
             if (!isPush)
-                presentSchedule.push(<ScheduleBox>nothing</ScheduleBox>)
+                presentSchedule.push(<ScheduleBox></ScheduleBox>)
         }
 
     })
