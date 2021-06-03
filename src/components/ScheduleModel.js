@@ -95,9 +95,9 @@ const ScheduleModel = () => {
         <ScheduleWrap>
             <h2>Lịch học theo tuần</h2>
             <h3>{cluster.name}</h3>
-            {/* <span onClick={() => setpresentDate((d) => moment(d).add(-7, 'days'))}>{'<'}</span> */}
+            <button onClick={() => setpresentDate((d) => moment(d).add(-7, 'days'))}>Tuần trước</button>
             <span>{presentDate.format('D/MM/YYYY')}</span>
-            <span onClick={handleIncrease}>{'>'}</span>
+            <button onClick={handleIncrease}>Tuần sau</button>
 
             <div id='schedule'>
                 <ScheduleBox ></ScheduleBox>
