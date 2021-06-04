@@ -2,6 +2,10 @@ import React from 'react';
 
 import styled, { keyframes } from 'styled-components'
 
+import { client } from '../utils/index'
+import { useParams } from 'react-router-dom'
+import useInput from '../hooks/useInput'
+
 const openModel = keyframes`
     from{
         opacity: 0;
@@ -50,18 +54,35 @@ const AddRoomWrap = styled.div`
         height:200px;
     }
 `
-const AddRoomModel = () => {
+const AddRoomModel = ({ setOpen }) => {
+    const { clusterId } = useParams()
+    const nameInput = useInput('')
+    const puPilsInput = useInput(0)
+    const roomtypeInput = useInput('PT')
+
+    const handleSubmit = async e => {
+        const payload = {
+            name: nameInput.value,
+            maxPupils: puPilsInput.value,
+            roomType: roomtypeInput.value
+        }
+        await client(`/schedule/room/${clusterId}`, { body:payload})
+        setOpen(false)
+    }
+
+
     return (
         <AddRoomWrap>
             <div className='new-room'>
-                <input type='text' placeholder='Tên phòng' name='name' />
-                <input type='text' placeholder='Sức chứa' name='maxPupils' required />
-                <select id='roomType' >
+                <h3>Tạo thêm phòng</h3>
+                <input value={nameInput.value} onChange={nameInput.onChange} type='text' placeholder='Tên phòng' name='name' />
+                <input value={puPilsInput.value} onChange={puPilsInput.onChange} type='number' placeholder='Sức chứa' name='maxPupils' required />
+                <select value={roomtypeInput.value} onChange={roomtypeInput.onChange} id='roomType' >
                     {/* <option disabled selected hidden>Loại phòng</option> */}
                     <option value='PT'>Phòng bình thường</option>
                     <option value='PM'>Phòng máy tính </option>
                 </select>
-                <button>Tạo</button>
+                <button onClick={handleSubmit}>Tạo</button>
             </div>
         </AddRoomWrap>
     );

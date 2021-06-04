@@ -1,6 +1,10 @@
 import React from 'react';
-
+import { useParams } from 'react-router-dom'
 import styled, { keyframes } from 'styled-components'
+
+import useInput from '../hooks/useInput'
+import { client } from '../utils/index'
+
 
 const openModel = keyframes`
     from{
@@ -51,25 +55,45 @@ const AddClassWrap = styled.div`
     }
 `
 
-const AddClassModel = () => {
+const AddClassModel = ({ setOpen }) => {
+    const { clusterId } = useParams()
+    const nameIput = useInput('')
+    const roomTypeInput = useInput('PT')
+    const pupilsInput = useInput(0)
+    const dayInput = useInput(0)
+    const dayTypeInput = useInput('even')
+
+    const handleSubmit = async e => {
+        const payload = {
+            name: nameIput.value,
+            numberOfPupils: pupilsInput.value,
+            learnDay: dayInput.value,
+            roomType: roomTypeInput.value,
+            dayType: dayTypeInput.value
+
+        }
+        await client(`/schedule/class/${clusterId}`, { body: payload })
+        setOpen(false)
+    }
     return (
         <AddClassWrap >
             <div className='new-class'>
-                <input type='text' placeholder='Tên lớp' name='name' required />
-                <input type='number' placeholder='sĩ số' name='numberOfPupils' required />
-                <input type='number' placeholder='Số ngày học' name='learnDay' min={1} required />
-                <select id='dayType' required>
+                <h3>Tạo thêm lớp</h3>
+                <input value={nameIput.value} onChange={nameIput.onChange} type='text' placeholder='Tên lớp' name='name' required />
+                <input value={pupilsInput.value} onChange={pupilsInput.onChange} type='number' placeholder='sĩ số' name='numberOfPupils' required />
+                <input value={dayInput.value} onChange={dayInput.onChange} type='number' placeholder='Số ngày học' name='learnDay' min={1} required />
+                <select value={dayTypeInput.value} onChange={dayTypeInput.onChange} id='dayType' required>
                     {/* <option disabled selected hidden>Kiểu ngày học</option> */}
                     <option value='even'>ngày chẵn</option>
                     <option value='odd'>ngày lẻ</option>
                     <option value='full'>Cả tuần</option>
                 </select>
-                <select id='roomType' required>
+                <select value={roomTypeInput.value} onChange={roomTypeInput.onChange} id='roomType' required>
                     {/* <option disabled selected hidden>Loại phòng</option> */}
                     <option value='PT'>Phòng bình thường</option>
                     <option value='PM'>Phòng máy tính </option>
                 </select>
-                <button > Tạo</button>
+                <button onClick={handleSubmit} > Tạo</button>
             </div>
         </AddClassWrap>
     );

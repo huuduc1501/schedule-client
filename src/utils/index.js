@@ -1,4 +1,5 @@
 import axios from 'axios'
+import {toast} from 'react-toastify'
 
 export const client = async (endPoint, { body, ...customConfig } = {}) => {
     const token = localStorage.getItem('token')
@@ -21,6 +22,8 @@ export const client = async (endPoint, { body, ...customConfig } = {}) => {
         }
     })
     const { data } = await clientInstance.request(endPoint, { data: body })
+    if(!data.success)
+        return toast.error(data.message)
     return data
 }
 export const authenticate = async (type, data) => {

@@ -6,8 +6,6 @@ import ScheduleModel from '../components/ScheduleModel';
 const Cluster = () => {
     return (
         <>
-        <AddRoom />
-        <AddClass />
         <ScheduleModel />
         </>
     );
